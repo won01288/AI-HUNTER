@@ -1,26 +1,54 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
+/* docs/design-guide.md 컬러 팔레트 — 라이트 단일 톤, 다크모드 없음 */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-ink: #14213d;
+  --color-paper: #f6f5f1;
+  --color-signal: #d9a441;
+  --color-pine: #2f5d50;
+  --color-slate: #6b6f76;
+  --color-line: #e2dfd6;
+
+  --font-display: var(--font-display), serif;
+  --font-body: var(--font-body), sans-serif;
+  --font-mono: var(--font-mono), monospace;
+
+  --radius-card: 14px;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* 시그니처 요소: 카드 상단을 얇은 골드 라인이 한 번 스윕하는 모션.
+   랜딩 히어로 전용 (docs/design-guide.md). */
+.scan-line {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--color-signal) 50%,
+    transparent
+  );
+  background-size: 60% 100%;
+  background-repeat: no-repeat;
+  background-position: -60% 0;
+  animation: scan-sweep 1.4s ease-out 1 forwards;
+}
+
+@keyframes scan-sweep {
+  from {
+    background-position: -60% 0;
+    opacity: 1;
+  }
+  to {
+    background-position: 160% 0;
+    opacity: 0;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@media (prefers-reduced-motion: reduce) {
+  .scan-line {
+    display: none;
+  }
 }

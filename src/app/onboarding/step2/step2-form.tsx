@@ -34,8 +34,8 @@ function toggleValue(list: string[], value: string): string[] {
 
 function chipClassName(selected: boolean): string {
   return selected
-    ? "rounded-full bg-zinc-900 px-3 py-1.5 text-sm font-medium text-white dark:bg-zinc-50 dark:text-zinc-900"
-    : "rounded-full border border-zinc-300 px-3 py-1.5 text-sm text-zinc-700 dark:border-zinc-700 dark:text-zinc-300";
+    ? "rounded-full bg-ink px-3 py-1.5 text-sm font-medium text-paper"
+    : "rounded-full border border-line px-3 py-1.5 text-sm text-ink";
 }
 
 const initialState: Step2State = {};
@@ -70,21 +70,21 @@ export function Step2Form({ initialValues }: Step2FormProps) {
   }
 
   return (
-    <div className="flex flex-1 items-center justify-center bg-zinc-50 px-4 py-16 dark:bg-black">
+    <div className="flex flex-1 items-center justify-center bg-paper px-4 py-16">
       <form
         action={formAction}
-        className="w-full max-w-xl space-y-8 rounded-lg border border-zinc-200 bg-white p-8 dark:border-zinc-800 dark:bg-zinc-950"
+        className="w-full max-w-xl space-y-8 rounded-card border border-line bg-white p-8 shadow-[0_2px_12px_rgba(20,33,61,0.06)]"
       >
         <div>
-          <p className="text-sm text-zinc-500">2 / 2단계 (선택)</p>
-          <h1 className="text-xl font-semibold text-zinc-900 dark:text-zinc-50">
+          <p className="text-sm text-slate">2 / 2단계 (선택)</p>
+          <h1 className="font-display text-xl font-bold text-ink">
             더 정확한 맞춤 채용정보 안내를 위한 추가 정보
           </h1>
         </div>
 
         {/* 기업 규모 선호 */}
         <div className="space-y-2">
-          <label className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
+          <label className="text-sm font-medium text-ink">
             선호 기업 규모 (선택)
           </label>
           <div className="flex flex-wrap gap-2">
@@ -111,14 +111,14 @@ export function Step2Form({ initialValues }: Step2FormProps) {
         {/* 우선순위 가중치 */}
         <div className="space-y-4">
           <div className="flex items-baseline justify-between">
-            <label className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
+            <label className="text-sm font-medium text-ink">
               우선순위 가중치 (합 100)
             </label>
             <span
               className={
                 weightSum === 100
-                  ? "text-sm text-zinc-500"
-                  : "text-sm font-medium text-red-600"
+                  ? "font-mono text-sm text-slate"
+                  : "font-mono text-sm font-medium text-red-600"
               }
             >
               합계 {weightSum} / 100
@@ -134,9 +134,9 @@ export function Step2Form({ initialValues }: Step2FormProps) {
             ] as const
           ).map((criterion) => (
             <div key={criterion.key} className="space-y-1">
-              <div className="flex items-center justify-between text-sm text-zinc-700 dark:text-zinc-300">
+              <div className="flex items-center justify-between text-sm text-ink">
                 <span>{criterion.label}</span>
-                <span>{weights[criterion.key]}</span>
+                <span className="font-mono">{weights[criterion.key]}</span>
               </div>
               <Slider.Root
                 className="relative flex h-5 w-full touch-none select-none items-center"
@@ -148,12 +148,12 @@ export function Step2Form({ initialValues }: Step2FormProps) {
                   setWeights((prev) => ({ ...prev, [criterion.key]: value }))
                 }
               >
-                <Slider.Track className="relative h-1.5 grow rounded-full bg-zinc-200 dark:bg-zinc-800">
-                  <Slider.Range className="absolute h-full rounded-full bg-zinc-900 dark:bg-zinc-50" />
+                <Slider.Track className="relative h-1.5 grow rounded-full bg-line">
+                  <Slider.Range className="absolute h-full rounded-full bg-ink" />
                 </Slider.Track>
                 <Slider.Thumb
                   aria-label={`${criterion.label} 가중치`}
-                  className="block h-4 w-4 rounded-full bg-zinc-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 dark:bg-zinc-50"
+                  className="block h-4 w-4 rounded-full bg-ink focus:outline-none focus-visible:ring-2 focus-visible:ring-ink/30"
                 />
               </Slider.Root>
             </div>
@@ -171,7 +171,7 @@ export function Step2Form({ initialValues }: Step2FormProps) {
 
         {/* 제외 조건 */}
         <div className="space-y-2">
-          <label className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
+          <label className="text-sm font-medium text-ink">
             제외하고 싶은 산업/기업 (선택)
           </label>
           <div className="flex gap-2">
@@ -186,12 +186,12 @@ export function Step2Form({ initialValues }: Step2FormProps) {
                 }
               }}
               placeholder="예: 콜센터, OO기업"
-              className="flex-1 rounded-md border border-zinc-300 px-3 py-2 text-sm text-zinc-900 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50"
+              className="flex-1 rounded-lg border border-line px-4 py-2.5 text-sm text-ink focus:border-ink focus:outline-none focus:ring-2 focus:ring-ink/20"
             />
             <button
               type="button"
               onClick={addExclusion}
-              className="rounded-md border border-zinc-300 px-3 py-2 text-sm text-zinc-700 dark:border-zinc-700 dark:text-zinc-300"
+              className="rounded-lg border border-line px-3 py-2 text-sm text-ink"
             >
               추가
             </button>
@@ -200,7 +200,7 @@ export function Step2Form({ initialValues }: Step2FormProps) {
             {exclusions.map((tag) => (
               <span
                 key={tag}
-                className="flex items-center gap-1 rounded-full bg-zinc-100 px-3 py-1 text-sm text-zinc-700 dark:bg-zinc-900 dark:text-zinc-300"
+                className="flex items-center gap-1 rounded-full bg-paper px-3 py-1 text-sm text-ink"
               >
                 {tag}
                 <button
@@ -209,7 +209,7 @@ export function Step2Form({ initialValues }: Step2FormProps) {
                   onClick={() =>
                     setExclusions((prev) => prev.filter((t) => t !== tag))
                   }
-                  className="text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200"
+                  className="text-slate hover:text-ink"
                 >
                   ×
                 </button>
@@ -232,7 +232,7 @@ export function Step2Form({ initialValues }: Step2FormProps) {
         <button
           type="submit"
           disabled={isPending || weightSum !== 100}
-          className="w-full rounded-md bg-zinc-900 px-4 py-2 text-sm font-medium text-white disabled:opacity-50 dark:bg-zinc-50 dark:text-zinc-900"
+          className="w-full rounded-lg bg-ink px-5 py-2.5 font-medium text-paper disabled:opacity-50"
         >
           {isPending ? "저장 중..." : "저장하고 완료"}
         </button>

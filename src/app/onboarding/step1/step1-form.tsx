@@ -38,8 +38,8 @@ function toggleCode(list: string[], code: string): string[] {
 
 function chipClassName(selected: boolean): string {
   return selected
-    ? "rounded-full bg-zinc-900 px-3 py-1.5 text-sm font-medium text-white dark:bg-zinc-50 dark:text-zinc-900"
-    : "rounded-full border border-zinc-300 px-3 py-1.5 text-sm text-zinc-700 dark:border-zinc-700 dark:text-zinc-300";
+    ? "rounded-full bg-ink px-3 py-1.5 text-sm font-medium text-paper"
+    : "rounded-full border border-line px-3 py-1.5 text-sm text-ink";
 }
 
 const initialState: Step1State = {};
@@ -66,21 +66,21 @@ export function Step1Form({
   ]);
 
   return (
-    <div className="flex flex-1 items-center justify-center bg-zinc-50 px-4 py-16 dark:bg-black">
+    <div className="flex flex-1 items-center justify-center bg-paper px-4 py-16">
       <form
         action={formAction}
-        className="w-full max-w-xl space-y-8 rounded-lg border border-zinc-200 bg-white p-8 dark:border-zinc-800 dark:bg-zinc-950"
+        className="w-full max-w-xl space-y-8 rounded-card border border-line bg-white p-8 shadow-[0_2px_12px_rgba(20,33,61,0.06)]"
       >
         <div>
-          <p className="text-sm text-zinc-500">1 / 2단계</p>
-          <h1 className="text-xl font-semibold text-zinc-900 dark:text-zinc-50">
+          <p className="text-sm text-slate">1 / 2단계</p>
+          <h1 className="font-display text-xl font-bold text-ink">
             맞춤 채용정보 안내를 위한 기본 정보
           </h1>
         </div>
 
         {/* 희망 근무지역 */}
         <div className="space-y-2">
-          <label className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
+          <label className="text-sm font-medium text-ink">
             희망 근무지역 (1개 이상)
           </label>
           <div className="flex flex-wrap gap-2">
@@ -108,7 +108,7 @@ export function Step1Form({
 
         {/* 직무 대분류 */}
         <div className="space-y-2">
-          <label className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
+          <label className="text-sm font-medium text-ink">
             직무 대분류 (1개 이상)
           </label>
           <div className="flex flex-wrap gap-2">
@@ -140,7 +140,7 @@ export function Step1Form({
         <div className="space-y-1">
           <label
             htmlFor="experienceYears"
-            className="text-sm font-medium text-zinc-700 dark:text-zinc-300"
+            className="text-sm font-medium text-ink"
           >
             총 경력 연차 (0 = 신입)
           </label>
@@ -152,13 +152,13 @@ export function Step1Form({
             step={1}
             required
             defaultValue={initialValues.experienceYears ?? 0}
-            className="w-32 rounded-md border border-zinc-300 px-3 py-2 text-sm text-zinc-900 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50"
+            className="w-32 rounded-lg border border-line px-4 py-2.5 font-mono text-sm text-ink focus:border-ink focus:outline-none focus:ring-2 focus:ring-ink/20"
           />
         </div>
 
         {/* 희망 연봉 범위 */}
         <div className="space-y-3">
-          <label className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
+          <label className="text-sm font-medium text-ink">
             희망 연봉 범위 (만원)
           </label>
 
@@ -173,20 +173,20 @@ export function Step1Form({
               setSalaryRange(value as [number, number])
             }
           >
-            <Slider.Track className="relative h-1.5 grow rounded-full bg-zinc-200 dark:bg-zinc-800">
-              <Slider.Range className="absolute h-full rounded-full bg-zinc-900 dark:bg-zinc-50" />
+            <Slider.Track className="relative h-1.5 grow rounded-full bg-line">
+              <Slider.Range className="absolute h-full rounded-full bg-ink" />
             </Slider.Track>
             <Slider.Thumb
               aria-label="최소 연봉"
-              className="block h-4 w-4 rounded-full bg-zinc-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 dark:bg-zinc-50"
+              className="block h-4 w-4 rounded-full bg-ink focus:outline-none focus-visible:ring-2 focus-visible:ring-ink/30"
             />
             <Slider.Thumb
               aria-label="희망 연봉"
-              className="block h-4 w-4 rounded-full bg-zinc-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 dark:bg-zinc-50"
+              className="block h-4 w-4 rounded-full bg-ink focus:outline-none focus-visible:ring-2 focus-visible:ring-ink/30"
             />
           </Slider.Root>
 
-          <div className="flex items-center gap-2 text-sm text-zinc-700 dark:text-zinc-300">
+          <div className="flex items-center gap-2 text-sm text-ink">
             <input
               type="number"
               min={SALARY_MIN_BOUND}
@@ -196,9 +196,9 @@ export function Step1Form({
               onChange={(e) =>
                 setSalaryRange([Number(e.target.value), salaryRange[1]])
               }
-              className="w-24 rounded-md border border-zinc-300 px-2 py-1 dark:border-zinc-700 dark:bg-zinc-900"
+              className="w-24 rounded-lg border border-line px-2 py-1 font-mono focus:border-ink focus:outline-none focus:ring-2 focus:ring-ink/20"
             />
-            <span>만원 ~</span>
+            <span className="text-slate">만원 ~</span>
             <input
               type="number"
               min={salaryRange[0]}
@@ -208,9 +208,9 @@ export function Step1Form({
               onChange={(e) =>
                 setSalaryRange([salaryRange[0], Number(e.target.value)])
               }
-              className="w-24 rounded-md border border-zinc-300 px-2 py-1 dark:border-zinc-700 dark:bg-zinc-900"
+              className="w-24 rounded-lg border border-line px-2 py-1 font-mono focus:border-ink focus:outline-none focus:ring-2 focus:ring-ink/20"
             />
-            <span>만원</span>
+            <span className="text-slate">만원</span>
           </div>
 
           <input type="hidden" name="salaryMin" value={salaryRange[0]} />
@@ -223,14 +223,12 @@ export function Step1Form({
 
         {/* 이직 긴급도 */}
         <div className="space-y-2">
-          <label className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
-            이직 긴급도
-          </label>
+          <label className="text-sm font-medium text-ink">이직 긴급도</label>
           <div className="flex flex-wrap gap-4">
             {URGENCY_OPTIONS.map((option) => (
               <label
                 key={option.value}
-                className="flex items-center gap-1.5 text-sm text-zinc-700 dark:text-zinc-300"
+                className="flex items-center gap-1.5 text-sm text-ink"
               >
                 <input
                   type="radio"
@@ -254,7 +252,7 @@ export function Step1Form({
         <button
           type="submit"
           disabled={isPending}
-          className="w-full rounded-md bg-zinc-900 px-4 py-2 text-sm font-medium text-white disabled:opacity-50 dark:bg-zinc-50 dark:text-zinc-900"
+          className="w-full rounded-lg bg-ink px-5 py-2.5 font-medium text-paper disabled:opacity-50"
         >
           {isPending ? "저장 중..." : "다음"}
         </button>
