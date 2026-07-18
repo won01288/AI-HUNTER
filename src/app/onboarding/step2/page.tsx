@@ -1,13 +1,53 @@
 import { requireUser } from "@/lib/session";
+import { db } from "@/lib/db";
+import { Step2Form } from "./step2-form";
 
-// 실제 정교화 폼은 9번 작업(2단계 온보딩 폼)에서 채운다.
-// 지금은 비회원 접근을 막는 세션 보호(requireUser)만 확인하는 자리표시자.
+// JSON 배열 문자열 컬럼(company_size, exclusions)을 안전하게 파싱한다.
+function parseJsonArray(value: unknown): string[] {
+  if (typeof value !== "string" || value.length === 0) return [];
+  try {
+    const parsed = JSON.parse(value);
+    return Array.isArray(parsed) ? parsed.map(String) : [];
+  } catch {
+    return [];
+  }
+}
+
+// priority_weights에 criterion별 행이 없으면 균등 배분(25씩)으로 간주한다
+// (db-schema.md 설계 메모 — DB에 기본값을 미리 넣어두지 않는 정책).
+const DEFAULT_WEIGHT = 25;
+
 export default async function OnboardingStep2Page() {
-  await requireUser();
+  const userId = await requireUser();
+
+  const [prefResult, weightsResult] = await Promise.all([
+    db.execute({
+      sql: `SELECT company_size, exclusions FROM user_preferences WHERE user_id = ?`,
+      args: [userId],
+    }),
+    db.execute({
+      sql: `SELECT criterion, weight FROM priority_weights WHERE user_id = ?`,
+      args: [userId],
+    }),
+  ]);
+
+  const prefRow = prefResult.rows[0];
+  const weightByCriterion = new Map(
+    weightsResult.rows.map((row) => [String(row.criterion), Number(row.weight)])
+  );
 
   return (
-    <div className="flex flex-1 items-center justify-center bg-zinc-50 px-4 py-16 dark:bg-black">
-      <p className="text-sm text-zinc-500">2단계 온보딩 폼 준비 중</p>
-    </div>
+    <Step2Form
+      initialValues={{
+        companySize: parseJsonArray(prefRow?.company_size),
+        exclusions: parseJsonArray(prefRow?.exclusions),
+        weights: {
+          region: weightByCriterion.get("region") ?? DEFAULT_WEIGHT,
+          salary: weightByCriterion.get("salary") ?? DEFAULT_WEIGHT,
+          job: weightByCriterion.get("job") ?? DEFAULT_WEIGHT,
+          companySize: weightByCriterion.get("company_size") ?? DEFAULT_WEIGHT,
+        },
+      }}
+    />
   );
 }
