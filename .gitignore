@@ -15,3 +15,7 @@ next-env.d.ts
 *.pem
 npm-debug.log*
 .vercel
+
+# 로컬 개발용 SQLite 파일 (Turso 실 연동 전까지 임시로 사용)
+local.db
+local.db-*
