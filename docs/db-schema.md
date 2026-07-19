@@ -42,28 +42,12 @@ CREATE TABLE priority_weights (
 );
 ```
 
-## Phase 2 이후 — 참고용 (지금 만들지 않음)
+## Phase 2 — 실제 정의 (docs/roadmap_phase2.md 참고)
 
-```sql
--- CREATE TABLE job_postings (
---   id TEXT PRIMARY KEY,
---   source TEXT,                    -- 'worknet' 등 출처
---   title TEXT,
---   region TEXT,
---   job_category TEXT,
---   company_size TEXT,
---   salary_min INTEGER,
---   posted_at TEXT,
---   source_url TEXT                 -- 원문 링크 (필수 — 콘텐츠 재게시 금지 원칙)
--- );
+`job_postings` 테이블 정의와 매칭 스코어링 방식은 docs/roadmap_phase2.md에
+있다. 매칭 결과는 요청 시점에 즉석 계산하므로 별도 recommendations 테이블은
+Phase 2에서 만들지 않는다 (Phase 3에서 알림 발송 이력용으로 추가 예정).
 
--- CREATE TABLE recommendations (
---   user_id TEXT REFERENCES users(id),
---   posting_id TEXT REFERENCES job_postings(id),
---   match_score REAL,
---   sent_at TEXT
--- );
-```
 
 ## 설계 메모
 - JSON을 문자열 컬럼에 저장하는 이유: SQLite/Turso는 네이티브 배열 타입이
