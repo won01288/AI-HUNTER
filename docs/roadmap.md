@@ -16,11 +16,14 @@
 - [ ] Render 배포 (스테이징)
 
 ## Phase 2 — 데이터 연동 및 매칭 (docs/roadmap_phase2.md 참고)
-- [ ] 워크넷 웹사이트 크롤러 개발
-- [ ] job_postings 테이블 설계 및 정기 배치 수집
-- [ ] 매칭 스코어링 로직 (priority_weights 반영, 미입력 시 균등 배분 기본값 적용)
-- [ ] 사용자용 매칭 결과 화면 (상위 10개 카드, design-guide.md 스타일)
-- [ ] 매칭 결과 확인용 내부 대시보드 (개발자용, breakdown 표시)
+- [x] 워크넷 웹사이트 크롤러 개발 (src/lib/collectors/worknet.ts, 목록 페이지
+      GET+파싱 방식. 상세 페이지 요청은 불필요한 것으로 확인되어 생략함)
+- [x] job_postings 테이블 설계 + 수동 배치 스크립트 (`npm run collect:worknet`).
+      **Render Cron Job 등록은 아직 안 됨** — 배포 설정이라 수동으로 등록 필요
+      (스크립트를 커맨드로 등록하면 됨, 하루 1회 권장)
+- [x] 매칭 스코어링 로직 (priority_weights 반영, 미입력 시 균등 배분 기본값 적용)
+- [x] 사용자용 매칭 결과 화면 (상위 10개 카드, design-guide.md 스타일)
+- [x] 매칭 결과 확인용 내부 대시보드 (개발자용, breakdown 표시, 로컬 전용)
 
 ## Phase 3 — 정기 추천 발송
 - [ ] 이메일 발송 연동

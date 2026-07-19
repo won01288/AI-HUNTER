@@ -87,9 +87,24 @@ match_score = Σ (기준별 0or100 × weight/100)
 보여줘서 문제 발생 시 바로 확인할 수 있게 한다.
 
 ## 6. 구현 순서 체크리스트
-- [ ] 워크넷 크롤러 작성 (목록→상세 페이지 파싱, 딜레이 적용)
-- [ ] job_postings 테이블 생성 + upsert 배치 스크립트
-- [ ] Render Cron Job 등록, 수동 실행으로 데이터 채워지는지 확인
-- [ ] 매칭 스코어링 함수 작성 (순수 함수) 및 단위 테스트
-- [ ] 사용자 대시보드에 매칭 카드 리스트 연결
-- [ ] 개발자용 디버그 화면에 breakdown + 수집 로그 표시
+- [x] 워크넷 크롤러 작성 — 실제로는 목록 페이지 GET에 검색조건을 쿼리파라미터로
+      붙이면 상세페이지 없이도 필요한 필드가 거의 다 나와서, 상세 페이지 파싱
+      단계는 생략함 (src/lib/collectors/worknet.ts 상단 주석 참고)
+- [x] job_postings 테이블 생성 + upsert 배치 스크립트 (scripts/collect-worknet.mjs)
+- [ ] Render Cron Job 등록 — 수동 실행(`npm run collect:worknet`)으로 데이터가
+      채워지는 것까지는 확인함. Render 대시보드에 크론으로 등록하는 건
+      배포 설정이라 별도로 사람이 해야 함
+- [x] 매칭 스코어링 함수 작성 (순수 함수, src/lib/matching.ts) 및 단위테스트
+      (src/lib/matching.test.ts, vitest 11개 케이스)
+- [x] 사용자 대시보드에 매칭 카드 리스트 연결
+- [x] 개발자용 디버그 화면에 breakdown + 수집 로그 표시 (NODE_ENV=production이면
+      404, 로컬에서만 접근 가능)
+
+## 7. 계획 대비 실제 구현에서 달라진 점
+- **직종코드**: 실제 work24 직종 선택 UI가 팝업 트리라 URL에 코드가 노출되지
+  않고, 온보딩의 TMP01~08도 원래 자리표시자였다. 채용제목 키워드로 TMP01~08을
+  추정하는 방식으로 대체했다 (src/lib/collectors/worknet.ts의
+  `classifyJobCategory`). 정확도는 낮은 근사치.
+- **기업규모**: 목록 페이지에 노출되지 않아 항상 NULL로 저장된다. 매칭 시
+  "정보 없음"은 감점하지 않고 100점 처리한다 (사용자 미입력과 동일 취급).
+- **상세 페이지 파싱 생략**: 위 6절 참고.

@@ -13,4 +13,6 @@ const schema = readFileSync(schemaPath, "utf-8");
 // executeMultiple은 세미콜론으로 구분된 여러 SQL문을 한 번에 실행해준다.
 await db.executeMultiple(schema);
 
-console.log("마이그레이션 완료: users, user_preferences, priority_weights 테이블 생성됨");
+console.log(
+  "마이그레이션 완료: users, user_preferences, priority_weights, job_postings, collection_runs 테이블 생성됨"
+);
